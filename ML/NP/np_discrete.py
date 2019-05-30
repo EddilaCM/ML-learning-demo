@@ -32,7 +32,9 @@ def reset_dataset(dataset):
 """step three: compute probability """
 def pro_label_y(data_dict):
     rec_dict = {}
+    rec_label_dict = None
     if data_dict is not None and len(data_dict) > 0:
+        pro_label = {}
         for tmp_k, tmp_v in data_dict.items():
             tmp_len = len(tmp_v)
 
@@ -54,17 +56,33 @@ def pro_label_y(data_dict):
                 temp_pro[count_k] = temp_c
 
             rec_dict[tmp_k] = temp_pro
+            pro_label[tmp_k] = tmp_len
+
+        rec_label_dict = {t_k: t_v/sum(pro_label.values()) for t_k, t_v in pro_label.items()}
     print(rec_dict)
+    print(rec_label_dict)
 
-    return rec_dict
+    return rec_label_dict, rec_dict
 
 
+"""step four: predict """
+def predict_label(series_predict, dataset):
+    label_pro, label_attribute_pro = pro_label_y(reset_dataset(dataset))
+    if label_pro is not None:
+        total_pro = {}
+        temp_dict = series_predict.to_dict()
+        for label, pro in label_pro.items():
+            tmp_pro = pro
+            for tmp_k, tmp_v in temp_dict.items():
+                tmp_pro *= label_attribute_pro[label][tmp_k][tmp_v]
 
+            total_pro[label] = tmp_pro
 
-"""step four: train model """
+        print(total_pro)
 
 
 if __name__ == '__main__':
     test_data = pd.read_csv('../../data-zip/np_discrete.csv')
-    pro_label_y(reset_dataset(test_data))
-    # print(reset_dataset(test_data))
+    tmp_s = test_data.iloc[1][1:]
+    print(test_data.iloc[0])
+    predict_label(tmp_s, test_data)
