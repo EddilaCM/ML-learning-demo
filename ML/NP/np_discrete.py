@@ -32,7 +32,10 @@ def reset_dataset(dataset):
 """step three: compute probability """
 def pro_label_y(data_dict):
     rec_dict = {}
+    rec_label_pro = None
     if data_dict is not None and len(data_dict) > 0:
+        pro_label = {}
+
         for tmp_k, tmp_v in data_dict.items():
             tmp_len = len(tmp_v)
 
@@ -54,9 +57,13 @@ def pro_label_y(data_dict):
                 temp_pro[count_k] = temp_c
 
             rec_dict[tmp_k] = temp_pro
-    print(rec_dict)
+            pro_label[tmp_k] = tmp_len
 
-    return rec_dict
+        rec_label_pro = {tmp_k: tmp_v/ sum(pro_label.values()) for tmp_k, tmp_v in pro_label.items()}
+    print(rec_dict)
+    print(rec_label_pro)
+
+    return rec_dict, rec_label_pro
 
 
 
