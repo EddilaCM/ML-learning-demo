@@ -1,7 +1,7 @@
 #!usr/bin/env python
 #-*- coding:utf-8 _*-
 """
-@author:chengmin
+@author:Eddila
 @file: np_discrete.py
 @time: 2019/05/{DAY}
 """
